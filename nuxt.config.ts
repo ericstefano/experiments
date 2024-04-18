@@ -4,11 +4,11 @@ import { appDescription } from './constants/index'
 export default defineNuxtConfig({
   modules: [
     '@vueuse/nuxt',
-    '@unocss/nuxt',
     '@pinia/nuxt',
-    '@nuxtjs/color-mode',
     '@vite-pwa/nuxt',
     '@nuxt/eslint',
+    '@nuxtjs/tailwindcss',
+    "shadcn-nuxt"
   ],
 
   experimental: {
@@ -17,14 +17,6 @@ export default defineNuxtConfig({
     payloadExtraction: false,
     renderJsonPayloads: true,
     typedPages: true,
-  },
-
-  css: [
-    '@unocss/reset/tailwind.css',
-  ],
-
-  colorMode: {
-    classSuffix: '',
   },
 
   nitro: {
@@ -36,7 +28,6 @@ export default defineNuxtConfig({
     prerender: {
       crawlLinks: false,
       routes: ['/'],
-      ignore: ['/hi'],
     },
   },
 
@@ -62,11 +53,6 @@ export default defineNuxtConfig({
 
   devtools: {
     enabled: true,
-  },
-
-  features: {
-    // For UnoCSS
-    inlineStyles: false,
   },
 
   eslint: {
