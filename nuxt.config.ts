@@ -2,13 +2,17 @@ import { pwa } from './config/pwa'
 import { appDescription } from './constants/index'
 
 export default defineNuxtConfig({
+    ssr:false, 
+  
   modules: [
     '@vueuse/nuxt',
+    'nuxt-icon',
     '@pinia/nuxt',
     '@vite-pwa/nuxt',
     '@nuxt/eslint',
     '@nuxtjs/tailwindcss',
-    "shadcn-nuxt"
+    '@nuxtjs/color-mode',
+    "shadcn-nuxt",
   ],
 
   experimental: {
@@ -17,6 +21,14 @@ export default defineNuxtConfig({
     payloadExtraction: false,
     renderJsonPayloads: true,
     typedPages: true,
+  },
+
+  vite: {
+    vue: {
+      script: {
+        propsDestructure: true,
+      }
+    }
   },
 
   nitro: {
@@ -31,6 +43,11 @@ export default defineNuxtConfig({
     },
   },
 
+  colorMode: {
+    preference: 'system',
+    classSuffix: '',
+  },
+
   app: {
     head: {
       viewport: 'width=device-width,initial-scale=1',
@@ -43,13 +60,13 @@ export default defineNuxtConfig({
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { name: 'description', content: appDescription },
         { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
-        { name: 'theme-color', media: '(prefers-color-scheme: light)', content: 'white' },
-        { name: 'theme-color', media: '(prefers-color-scheme: dark)', content: '#222222' },
       ],
     },
   },
 
   pwa,
+
+  components: true,
 
   devtools: {
     enabled: true,
