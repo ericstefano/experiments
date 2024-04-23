@@ -4,7 +4,6 @@ import { useFormField } from './useFormField'
 import { cn } from '~/lib/utils'
 
 const props = defineProps<{
-  error?: boolean;
   class?: HTMLAttributes['class']
 }>()
 
@@ -14,7 +13,7 @@ const { formDescriptionId } = useFormField()
 <template>
   <p
     :id="formDescriptionId"
-    :class="cn('text-sm text-muted-foreground', {'text-destructive': error}, props.class)"
+    :class="cn('text-sm text-muted-foreground', props.class)"
   >
     <slot />
   </p>
