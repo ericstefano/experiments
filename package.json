@@ -29,6 +29,8 @@
     "consola": "^3.2.3",
     "eslint": "^9.0.0",
     "eslint-plugin-format": "^0.1.0",
+    "libphonenumber-js": "^1.10.61",
+    "maska": "^2.1.11",
     "nuxt": "^3.11.2",
     "nuxt-icon": "^0.6.10",
     "pinia": "^2.1.7",
