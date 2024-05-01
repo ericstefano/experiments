@@ -2,7 +2,7 @@
 import { configure, useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/valibot'
 import * as v from 'valibot'
-import FormItem from '~/components/ui/form/FormItem.vue'
+
 
 // Issues:
 // Using valibot instead of zod because of this issue: https://github.com/logaretm/vee-validate/issues/4208
