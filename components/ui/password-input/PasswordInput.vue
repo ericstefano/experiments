@@ -11,8 +11,8 @@ function toggle() {
 
 <template>
   <div :class="cn('relative flex items-center', classProp)">
-    <Input v-bind="_props" class="pr-[3.25rem]" :type="show ? 'text' : 'password'"/>
-    <Button class="absolute right-3 rounded-full p-1.5 h-auto" type="button" variant="ghost" @click="toggle" aria-label="show-password">
+    <Input v-bind="_props" class="pr-11" :type="show ? 'text' : 'password'"/>
+    <Button class="absolute end-2 rounded-full p-1.5 h-auto" type="button" variant="ghost" @click="toggle" aria-label="show-password">
       <Icon v-if="show" size="1.25rem" name="lucide:eye"/>
       <Icon v-if="!show" size="1.25rem" name="lucide:eye-off"/>
     </Button>
