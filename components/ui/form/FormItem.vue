@@ -1,13 +1,13 @@
 <script lang="ts">
 import type { HTMLAttributes, InjectionKey } from 'vue'
+
+export const FORM_ITEM_INJECTION_KEY
+  = Symbol() as InjectionKey<string>
 </script>
 
 <script lang="ts" setup>
 import { provide } from 'vue'
 import { useId } from 'radix-vue'
-
-export const FORM_ITEM_INJECTION_KEY
-  = Symbol() as InjectionKey<string>
 
 const props = defineProps<{
   class?: HTMLAttributes['class']
