@@ -3,14 +3,30 @@ import { configure, useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/valibot'
 import * as v from 'valibot'
 
-
 // Issues:
 // Using valibot instead of zod because of this issue: https://github.com/logaretm/vee-validate/issues/4208
 // Using a Map "cache" because VeeValidate or Valibot dispares a request on every field input change to validate phone.
 // Password confirm field only throws error when other fields are correct.
 // FormControl applies aria-invalid if error. Because radix-checkbox renders button first, it applies to it.
 
-const phoneCache = ref(new Map<string, boolean>())
+// Alternative to use worker:
+// import Test from '~/assets/workers/test.worker?worker'
+// const { data, worker, post, terminate } = useWebWorker(new Test())
+
+// Another alternative to use worker:
+// const url = new URL('~/assets/workers/test.worker.ts', import.meta.url).href
+// const { data, worker, post, terminate } = useWebWorker(url, {
+//   type: 'module',
+// })
+
+import Test from '~/assets/workers/test.worker.ts?worker&url'
+
+const { worker } = useWebWorker(Test, {
+  type: 'module',
+})
+worker.value?.postMessage('oi')
+
+const phoneCache = shallowRef(new Map<string, boolean>())
 
 async function validatePhone(number: string) {
   return $fetch('/api/phone', {
@@ -37,12 +53,23 @@ async function handleValidatePhone(number: string) {
   return valid
 }
 
-const acceptedImageTypes: Array<`${string}/${string}`> = [
+function getFileExtension(fileName: string) {
+  return fileName.substring(fileName.lastIndexOf('.') + 1)
+}
+
+const acceptedMimeTypes: Array<`${string}/${string}`> = [
   'image/jpeg',
-  'image/jpg',
   'image/png',
   'image/webp',
   'image/avif',
+]
+
+const acceptedFileExtensions: Array<string> = [
+  'jpeg',
+  'jpg',
+  'png',
+  'webp',
+  'avif',
 ]
 
 const acceptedFileSize = 5 * 1024 * 1024 // 5MB
@@ -103,8 +130,12 @@ const fields = {
     ]),
   image: v
     .instance(File, 'Por favor, insira uma imagem.', [
-      v.mimeType(acceptedImageTypes, 'Por favor, selecione um arquivo de imagem.'),
+      v.mimeType(acceptedMimeTypes, 'Por favor, selecione um arquivo de imagem.'),
       v.maxSize(acceptedFileSize, 'Por favor, selecione uma imagem menor que 5 MB.'),
+      v.custom((file) => {
+        return acceptedFileExtensions.includes(getFileExtension(file.name))
+      }, 'Por favor, selecione um arquivo de imagem.'),
+
     ]),
   terms: v
     .literal(true, 'Por favor, preencha para continuar.'),
@@ -223,7 +254,7 @@ const onSubmit = handleSubmit(async (values) => {
             <FormItem>
               <FormLabel>Imagem</FormLabel>
               <FormControl>
-                <Input type="file" v-bind="field" :error="!!errorMessage" :accept="acceptedImageTypes.join(',')" />
+                <Input type="file" v-bind="field" :error="!!errorMessage" :accept="acceptedMimeTypes.join(',')" />
               </FormControl>
               <FormMessage />
             </FormItem>
