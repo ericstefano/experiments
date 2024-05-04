@@ -2,6 +2,8 @@
 import { configure, useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/valibot'
 import * as v from 'valibot'
+import { validatePhoneNumber } from './-api'
+import { ACCEPTED_IMAGE_FILE_EXTENSIONS, ACCEPTED_IMAGE_MIME_TYPES, BRAZILIAN_PHONE_MASK, BRAZILIAN_STATES, MAX_IMAGE_FILE_SIZE } from '~/constants/'
 
 // Issues:
 // Using valibot instead of zod because of this issue: https://github.com/logaretm/vee-validate/issues/4208
@@ -28,121 +30,74 @@ worker.value?.postMessage('oi')
 
 const phoneCache = shallowRef(new Map<string, boolean>())
 
-async function validatePhone(number: string) {
-  return $fetch('/api/phone', {
-    method: 'post',
-    body: {
-      number,
-    },
-  })
-}
-
-function parsePhone(number: string) {
-  return number.replaceAll(/[\(\)\- ]/g, '')
-}
+const debouncedValidatePhoneNumber = useDebounceFn(validatePhoneNumber, 1000)
 
 async function handleValidatePhone(number: string) {
-  const parsed = parsePhone(number)
-  if (parsed.length < 11)
-    return false
-  if (phoneCache.value.has(parsed))
-    return !!phoneCache.value.get(parsed)
-  const response = await validatePhone(parsed)
+  const sanitized = sanitizePhoneNumber(number)
+  if (phoneCache.value.has(sanitized))
+    return !!phoneCache.value.get(sanitized)
+  const response = await debouncedValidatePhoneNumber(sanitized)
   const valid = response && !!response.valid
-  phoneCache.value.set(parsed, valid)
+  phoneCache.value.set(sanitized, valid)
   return valid
 }
 
-function getFileExtension(fileName: string) {
-  return fileName.substring(fileName.lastIndexOf('.') + 1)
-}
+const UFS = BRAZILIAN_STATES.map(({ uf }) => uf)
 
-const acceptedMimeTypes: Array<`${string}/${string}`> = [
-  'image/jpeg',
-  'image/png',
-  'image/webp',
-  'image/avif',
-]
+const fullname = v
+  .string('Por favor, preencha o campo de nome.', [
+    v.minLength(2, 'Po r favor, insira um nome com pelo menos 2 caracteres.'),
+    v.maxLength(25, 'Por favor, reduza seu nome para 50 caracteres ou menos.'),
+    v.regex(/^[\p{L}\s]+$/u, 'Por favor, insira somente letras no seu nome.'),
+    v.toTrimmed(),
+  ])
 
-const acceptedFileExtensions: Array<string> = [
-  'jpeg',
-  'jpg',
-  'png',
-  'webp',
-  'avif',
-]
+const email = v
+  .string('Por favor, preencha o campo de e-mail.', [
+    v.email('Por favor, insira um e-mail válido.'),
+  ])
 
-const acceptedFileSize = 5 * 1024 * 1024 // 5MB
+const phone = v
+  .stringAsync('Por favor, preencha o campo de celular.', [v.toCustom(sanitizePhoneNumber), v.customAsync(handleValidatePhone, 'Por favor, insira um número válido.')])
+const password = v
+  .string('Por favor, preencha o campo de senha.', [
+    v.minLength(8, 'Por favor, insira uma senha válida com pelo menos 8 caracteres.'),
+  ])
 
-const states = [
-  { name: 'Acre', uf: 'AC' },
-  { name: 'Alagoas', uf: 'AL' },
-  { name: 'Amapá', uf: 'AP' },
-  { name: 'Amazonas', uf: 'AM' },
-  { name: 'Bahia', uf: 'BA' },
-  { name: 'Ceará', uf: 'CE' },
-  { name: 'Distrito Federal', uf: 'DF' },
-  { name: 'Espírito Santo', uf: 'ES' },
-  { name: 'Goiás', uf: 'GO' },
-  { name: 'Maranhão', uf: 'MA' },
-  { name: 'Mato Grosso', uf: 'MT' },
-  { name: 'Mato Grosso do Sul', uf: 'MS' },
-  { name: 'Minas Gerais', uf: 'MG' },
-  { name: 'Pará', uf: 'PA' },
-  { name: 'Paraíba', uf: 'PB' },
-  { name: 'Paraná', uf: 'PR' },
-  { name: 'Pernambuco', uf: 'PE' },
-  { name: 'Piauí', uf: 'PI' },
-  { name: 'Rio de Janeiro', uf: 'RJ' },
-  { name: 'Rio Grande do Norte', uf: 'RN' },
-  { name: 'Rio Grande do Sul', uf: 'RS' },
-  { name: 'Rondônia', uf: 'RO' },
-  { name: 'Roraima', uf: 'RR' },
-  { name: 'Santa Catarina', uf: 'SC' },
-  { name: 'São Paulo', uf: 'SP' },
-  { name: 'Sergipe', uf: 'SE' },
-  { name: 'Tocantins', uf: 'TO' },
-]
+const confirm = v
+  .string('Por favor, preencha o campo de confirmação de senha.', [
+    v.minLength(8, 'Por favor, preencha o campo de confirmação de senha.'),
+  ])
 
-const ufs = states.map(({ uf }) => uf)
+const image = v
+  .instance(File, 'Por favor, insira uma imagem.', [
+    v.mimeType(ACCEPTED_IMAGE_MIME_TYPES, 'Por favor, selecione um arquivo de imagem.'),
+    v.maxSize(MAX_IMAGE_FILE_SIZE, 'Por favor, selecione uma imagem menor que 5 MB.'),
+    v.custom((file) => {
+      return ACCEPTED_IMAGE_FILE_EXTENSIONS.includes(getFileExtension(file.name))
+    }, 'Por favor, selecione um arquivo de imagem.'),
+
+  ])
+
+const terms = v
+  .literal(true, 'Por favor, preencha para continuar.')
+
+const shift = v
+  .picklist(['morning', 'afternoon', 'evening'], 'Por favor, selecione um turno.')
+
+const uf = v
+  .picklist(UFS, 'Por favor, selecione um estado.')
 
 const fields = {
-  fullname: v
-    .string('Por favor, preencha o campo de nome.', [
-      v.minLength(2, 'Por favor, insira um nome com pelo menos 2 caracteres.'),
-      v.maxLength(25, 'Por favor, reduza seu nome para 50 caracteres ou menos.'),
-      v.regex(/^[\p{L}\s]+$/u, 'Por favor, insira somente letras no seu nome.'),
-      v.toTrimmed(),
-    ]),
-  email: v
-    .string('Por favor, preencha o campo de e-mail.', [
-      v.email('Por favor, insira um e-mail válido.'),
-    ]),
-  phone: v
-    .stringAsync('Por favor, preencha o campo de celular.', [v.toCustom(parsePhone), v.customAsync(handleValidatePhone, 'Por favor, insira um número válido.')]),
-  password: v
-    .string('Por favor, preencha o campo de senha.', [
-      v.minLength(8, 'Por favor, insira uma senha válida com pelo menos 8 caracteres.'),
-    ]),
-  confirm: v
-    .string('Por favor, preencha o campo de confirmação de senha.', [
-      v.minLength(8, 'Por favor, preencha o campo de confirmação de senha.'),
-    ]),
-  image: v
-    .instance(File, 'Por favor, insira uma imagem.', [
-      v.mimeType(acceptedMimeTypes, 'Por favor, selecione um arquivo de imagem.'),
-      v.maxSize(acceptedFileSize, 'Por favor, selecione uma imagem menor que 5 MB.'),
-      v.custom((file) => {
-        return acceptedFileExtensions.includes(getFileExtension(file.name))
-      }, 'Por favor, selecione um arquivo de imagem.'),
-
-    ]),
-  terms: v
-    .literal(true, 'Por favor, preencha para continuar.'),
-  shift: v
-    .picklist(['morning', 'afternoon', 'evening'], 'Por favor, selecione um turno.'),
-  uf: v
-    .picklist(ufs, 'Por favor, selecione um estado.'),
+  fullname,
+  email,
+  phone,
+  password,
+  confirm,
+  image,
+  terms,
+  shift,
+  uf,
 }
 
 const schema = v.objectAsync(fields, [
@@ -158,7 +113,7 @@ const schema = v.objectAsync(fields, [
 const formSchema = toTypedSchema(schema)
 
 configure({
-  bails: false,
+  bails: true,
 })
 
 const { handleSubmit } = useForm({
@@ -223,7 +178,7 @@ const onSubmit = handleSubmit(async (values) => {
               <FormControl>
                 <Input
                   v-maska type="text" placeholder="Digite o seu celular" :error="!!errorMessage"
-                  v-bind="componentField" data-maska="(##) #####-####"
+                  v-bind="componentField" :data-maska="BRAZILIAN_PHONE_MASK"
                 />
               </FormControl>
               <FormMessage />
@@ -254,7 +209,10 @@ const onSubmit = handleSubmit(async (values) => {
             <FormItem>
               <FormLabel>Imagem</FormLabel>
               <FormControl>
-                <Input type="file" v-bind="field" :error="!!errorMessage" :accept="acceptedMimeTypes.join(',')" />
+                <Input
+                  type="file" v-bind="field" :error="!!errorMessage"
+                  :accept="ACCEPTED_IMAGE_MIME_TYPES.join(',')"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -302,7 +260,7 @@ const onSubmit = handleSubmit(async (values) => {
                 </FormControl>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectItem v-for="{ uf, name } in states" :key="uf" :value="uf">
+                    <SelectItem v-for="{ uf, name } in BRAZILIAN_STATES" :key="uf" :value="uf">
                       {{ uf }} - {{ name }}
                     </SelectItem>
                   </SelectGroup>
