@@ -11,7 +11,11 @@
     "start": "node .output/server/index.mjs",
     "start:generate": "npx serve .output/public",
     "lint": "eslint .",
-    "typecheck": "vue-tsc --noEmit"
+    "typecheck": "vue-tsc --noEmit",
+    "db:generate": "drizzle-kit generate:sqlite",
+    "db:migrate": "wrangler d1 migrations apply demo --local",
+    "db:migrate:prod": "wrangler d1 migrations apply demo",
+    "db:studio": "drizzle-kit studio"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.13.3",

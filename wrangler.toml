@@ -1,6 +1,6 @@
 [[d1_databases]]
-binding = "DB" # i.e. available in your Worker on env.DB
+binding = "DB"
 database_name = "demo"
-database_id = "6ac5edb1-4e08-41d2-9950-522d926cdfa9"
+database_id = "b11a90b1-4c18-4d5e-af9f-dcbb7e7baa64"
 preview_database_id = "DB"
 migrations_dir = "./server/database/migrations"

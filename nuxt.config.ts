@@ -2,8 +2,8 @@ import { pwa } from './config/pwa'
 import { appDescription } from './constants/index'
 
 export default defineNuxtConfig({
-    ssr:false, 
-  
+  ssr: false,
+
   modules: [
     '@vueuse/nuxt',
     'nuxt-icon',
@@ -12,8 +12,8 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
-    "shadcn-nuxt",
-    "@nuxthub/core"
+    'shadcn-nuxt',
+    '@nuxthub/core',
   ],
 
   experimental: {
@@ -28,8 +28,8 @@ export default defineNuxtConfig({
     vue: {
       script: {
         propsDestructure: true,
-      }
-    }
+      },
+    },
   },
 
   nitro: {

@@ -5,7 +5,6 @@ import fsLiteDriver from 'unstorage/drivers/fs-lite'; import { createStorage } f
 import sharp from 'sharp'
 import { emailSchema, fullnameSchema, passwordSchema, shiftSchema, termsSchema, ufSchema } from '~/pages/form/-schema'
 import { ACCEPTED_IMAGE_MIME_TYPES, MAX_IMAGE_FILE_SIZE } from '~/constants'
-import watermark from '~/assets/images/testwatermark.png'
 
 const storage = createStorage({
   driver: fsLiteDriver({ base: './.nuxt/tmp' }),
