@@ -4,13 +4,15 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+dependencies:
+  '@iconify-json/lucide':
+    specifier: ^1.1.186
+    version: 1.1.186
+
 devDependencies:
   '@antfu/eslint-config':
     specifier: ^2.13.3
     version: 2.13.3(@vue/compiler-sfc@3.4.21)(eslint-plugin-format@0.1.0)(eslint@9.0.0)(typescript@5.4.5)
-  '@iconify-json/lucide':
-    specifier: ^1.1.186
-    version: 1.1.186
   '@nuxt/eslint':
     specifier: ^0.3.6
     version: 0.3.6(eslint@9.0.0)(nuxt@3.11.2)(rollup@2.79.1)(typescript@5.4.5)(vite@5.2.8)
@@ -2624,7 +2626,7 @@ packages:
     resolution: {integrity: sha512-T+ZwxEJ2773EtHE3waU6RmLhvwvtXqmA+6WNbyfN5hg9SwNMhnPxYXcZrEWkaRPbUszsao6YOdtH5G56pgebFg==}
     dependencies:
       '@iconify/types': 2.0.0
-    dev: true
+    dev: false
 
   /@iconify/collections@1.0.415:
     resolution: {integrity: sha512-QtTK7kvL6tJKlA7qKWHohf9nZiy7SBy6ZUiAdOrsS/3AfRTMLhlh0SOfoTeVTAq/uHowOHrrmOmklxpR3YQwCA==}
@@ -2634,7 +2636,6 @@ packages:
 
   /@iconify/types@2.0.0:
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
-    dev: true
 
   /@iconify/utils@2.1.22:
     resolution: {integrity: sha512-6UHVzTVXmvO8uS6xFF+L/QTSpTzA/JZxtgU+KYGFyDYMEObZ1bu/b5l+zNJjHy+0leWjHI+C0pXlzGvv3oXZMA==}
