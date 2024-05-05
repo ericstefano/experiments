@@ -17,9 +17,11 @@
     "db:migrate:prod": "wrangler d1 migrations apply demo",
     "db:studio": "drizzle-kit studio"
   },
+  "dependencies": {
+    "@iconify-json/lucide": "^1.1.186"
+  },
   "devDependencies": {
     "@antfu/eslint-config": "^2.13.3",
-    "@iconify-json/lucide": "^1.1.186",
     "@nuxt/eslint": "^0.3.6",
     "@nuxthub/core": "^0.5.16",
     "@nuxtjs/color-mode": "^3.4.0",
