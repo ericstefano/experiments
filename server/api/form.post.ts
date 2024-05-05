@@ -1,4 +1,19 @@
+import { Buffer } from 'node:buffer'
 import * as v from 'valibot'
+import parsePhoneNumber from 'libphonenumber-js/mobile'
+import fsLiteDriver from 'unstorage/drivers/fs-lite'; import { createStorage } from 'unstorage'
+import sharp from 'sharp'
+import { emailSchema, fullnameSchema, passwordSchema, shiftSchema, termsSchema, ufSchema } from '~/pages/form/-schema'
+import { ACCEPTED_IMAGE_MIME_TYPES, MAX_IMAGE_FILE_SIZE } from '~/constants'
+import watermark from '~/assets/images/testwatermark.png'
+
+const storage = createStorage({
+  driver: fsLiteDriver({ base: './.nuxt/tmp' }),
+})
+
+const assets = createStorage({
+  driver: fsLiteDriver({ base: './assets' }),
+})
 
 export default defineEventHandler(async (event) => {
   const multipart = await readMultipartFormData(event)
@@ -15,20 +30,59 @@ export default defineEventHandler(async (event) => {
   for (const part of multipart) {
     if (!part.name)
       return
-
     if (part.filename) {
-      object[part.name] = {
-        name: part.filename,
-        type: part.type,
-        size: part.data.length,
-      }
+      const { name: key, filename: name, ...rest } = part
+      object[key] = { name, size: rest.data.length, ...rest }
     }
-    else {
-      object[part.name] = part.data.toString()
-    }
+    else { object[part.name] = part.data.toString() }
   }
 
-  // const parsed = v.safeParse(schema, object)
+  const imageSchema = v.object({
+    name: v.string(),
+    data: v.instance(Buffer),
+    size: v.number([v.maxValue(MAX_IMAGE_FILE_SIZE)]),
+    type: v.picklist(ACCEPTED_IMAGE_MIME_TYPES),
+  })
 
-  // console.log(object, parsed, getFileExtension(object.image.name))
+  const phoneSchema = v
+    .string([v.toCustom(sanitizePhoneNumber), v.custom(number => !!parsePhoneNumber(number, 'BR')?.isValid())])
+
+  const fields = {
+    fullname: fullnameSchema,
+    email: emailSchema,
+    phone: phoneSchema,
+    password: passwordSchema,
+    image: imageSchema,
+    terms: v.coerce(termsSchema, Boolean),
+    shift: shiftSchema,
+    uf: ufSchema,
+  }
+
+  const schema = v.object(fields)
+
+  const parsed = v.safeParse(schema, object)
+
+  if (!parsed.success) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Bad Request',
+      message: Object.entries(v.flatten(parsed.issues).nested).map(([key, value]) => `${key}: ${value?.join(',')}`).at(0),
+    })
+  }
+
+  const sharpStream = sharp(parsed.output.image.data)
+  const metadata = await sharpStream.metadata()
+  let toAvif = sharpStream.toFormat('avif', { effort: 0, quality: 45 }).withMetadata()
+  if (metadata.orientation)
+    toAvif = toAvif.rotate()
+  const toBuffer = await toAvif.composite([
+    { input: await assets.getItemRaw('/images/watermark.png'), blend: 'atop', gravity: 'centre' },
+    { input: await assets.getItemRaw('/images/watermark.png'), blend: 'exclusion', left: 800, top: 1160 },
+  ])
+    .resize({ width: 1024 }).toBuffer()
+  storage.setItemRaw('to0.avif', toBuffer)
+  return {
+    ...parsed.output,
+    image: undefined,
+  }
 })

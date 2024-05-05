@@ -1,3 +1,3 @@
-import { getFileExtension } from '~/utils/string'
+import { getFileExtension, sanitizePhoneNumber } from '~/utils/string'
 
-export { getFileExtension }
+export { getFileExtension, sanitizePhoneNumber }

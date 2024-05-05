@@ -15,9 +15,9 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.13.3",
-    "@iconify-json/carbon": "^1.1.31",
-    "@iconify-json/twemoji": "^1.1.15",
+    "@iconify-json/lucide": "^1.1.186",
     "@nuxt/eslint": "^0.3.6",
+    "@nuxthub/core": "^0.5.16",
     "@nuxtjs/color-mode": "^3.4.0",
     "@nuxtjs/tailwindcss": "^6.12.0",
     "@pinia/nuxt": "^0.5.1",
@@ -27,6 +27,8 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "consola": "^3.2.3",
+    "drizzle-kit": "^0.20.17",
+    "drizzle-orm": "^0.30.10",
     "eslint": "^9.0.0",
     "eslint-plugin-format": "^0.1.0",
     "libphonenumber-js": "^1.10.61",
@@ -36,11 +38,14 @@
     "pinia": "^2.1.7",
     "radix-vue": "^1.7.0",
     "shadcn-nuxt": "^0.10.2",
+    "sharp": "^0.33.3",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.4.5",
+    "unstorage": "^1.10.2",
     "valibot": "^0.30.0",
     "vee-validate": "^4.12.6",
-    "vue-tsc": "^2.0.12"
+    "vue-tsc": "^2.0.12",
+    "wrangler": "^3.53.1"
   }
 }
