@@ -80,8 +80,8 @@ devDependencies:
     specifier: ^0.10.2
     version: 0.10.2(rollup@2.79.1)
   sharp:
-    specifier: ^0.30.6
-    version: 0.30.7
+    specifier: 0.30.6
+    version: 0.30.6
   tailwind-merge:
     specifier: ^2.2.2
     version: 2.2.2
@@ -11375,8 +11375,8 @@ packages:
       - supports-color
     dev: true
 
-  /sharp@0.30.7:
-    resolution: {integrity: sha512-G+MY2YW33jgflKPTXXptVO28HvNOo9G3j0MybYAHeEmby+QuD2U98dT6ueht9cv/XDqZspSpIhoSW+BAKJ7Hig==}
+  /sharp@0.30.6:
+    resolution: {integrity: sha512-lSdVxFxcndzcXggDrak6ozdGJgmIgES9YVZWtAFrwi+a/H5vModaf51TghBtMPw+71sLxUsTy2j+aB7qLIODQg==}
     engines: {node: '>=12.13.0'}
     requiresBuild: true
     dependencies:
