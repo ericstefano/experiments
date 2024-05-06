@@ -1,6 +1,6 @@
 import { defineConfig } from 'drizzle-kit'
 
-const {LOCAL_DB_PATH} = process.env;
+const { LOCAL_DB_PATH } = process.env;
 
 export default defineConfig({
   schema: './server/database/schema.ts',
@@ -8,4 +8,5 @@ export default defineConfig({
   driver: 'better-sqlite',
   dbCredentials: {
     url: LOCAL_DB_PATH,
+  }
 })
