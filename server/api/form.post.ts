@@ -81,7 +81,7 @@ export default defineEventHandler(async (event) => {
   //   .resize({ width: 1024 }).toBuffer()
   // storage.setItemRaw('to0.avif', toBuffer)
 
-  const value = await useDB(event).insert(tables.user).values({
+  const value = await useDB(event.context.cloudflare.env.DB).insert(tables.user).values({
     id: `${Math.round(Math.random() * 100000)}`,
     email: parsed.output.email,
     fullname: parsed.output.fullname,

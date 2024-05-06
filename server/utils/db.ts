@@ -6,8 +6,8 @@ export { sql, eq, and, or } from 'drizzle-orm'
 
 export const tables = schema
 
-export function useDB(event: H3Event) {
-  return drizzle(event.context.cloudflare.env.DB, { schema })
+export function useDB(D1 : D1Database) {
+  return drizzle(D1, { schema })
 }
 
 // export function useDB() {
