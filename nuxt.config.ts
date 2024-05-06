@@ -6,7 +6,7 @@ export default defineNuxtConfig({
 
   modules: [
     // '@nuxthub/core',
-    'nitro-cloudflare-dev',
+    // 'nitro-cloudflare-dev',
     '@vueuse/nuxt',
     'nuxt-icon',
     '@pinia/nuxt',
