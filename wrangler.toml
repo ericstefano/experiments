@@ -1,0 +1,7 @@
+main = "./.output/server/index.mjs"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "default"
+database_id = "74cc98aa-cab5-4ac2-a8eb-cc0837c34f42"
+migrations_dir = "./server/database/migrations"

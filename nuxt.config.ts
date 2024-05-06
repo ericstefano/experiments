@@ -5,7 +5,8 @@ export default defineNuxtConfig({
   ssr: false,
 
   modules: [
-    '@nuxthub/core',
+    // '@nuxthub/core',
+    'nitro-cloudflare-dev',
     '@vueuse/nuxt',
     'nuxt-icon',
     '@pinia/nuxt',
@@ -24,9 +25,9 @@ export default defineNuxtConfig({
     typedPages: true,
   },
 
-  hub: {
-    database: true,
-  },
+  // hub: {
+  //   database: true,
+  // },
 
   vite: {
     vue: {

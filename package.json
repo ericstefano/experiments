@@ -12,7 +12,10 @@
     "start:generate": "npx serve .output/public",
     "lint": "eslint .",
     "typecheck": "vue-tsc --noEmit",
-    "db:generate": "drizzle-kit generate:sqlite"
+    "db:generate": "drizzle-kit generate:sqlite",
+    "db:migrate": "wrangler d1 migrations apply default --local",
+    "db:migrate:prod": "wranger d1 migrations apply default",
+    "db:studio": "LOCAL_DB_PATH=$(find ./.wrangler/state/v3/d1/miniflare-D1DatabaseObject -type f -name '*.sqlite' -print -quit) drizzle-kit studio --config ./drizzle.config.local.ts"
   },
   "dependencies": {
     "@iconify-json/lucide": "^1.1.186",
@@ -28,6 +31,7 @@
     "@vee-validate/valibot": "^4.12.6",
     "@vite-pwa/nuxt": "^0.6.0",
     "@vueuse/nuxt": "^10.9.0",
+    "better-sqlite3": "^9.6.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "consola": "^3.2.3",
@@ -36,6 +40,7 @@
     "eslint-plugin-format": "^0.1.0",
     "libphonenumber-js": "^1.10.61",
     "maska": "^2.1.11",
+    "nitro-cloudflare-dev": "^0.1.4",
     "nuxt": "^3.11.2",
     "nuxt-icon": "^0.6.10",
     "pinia": "^2.1.7",

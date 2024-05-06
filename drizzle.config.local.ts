@@ -1,11 +1,11 @@
 import { defineConfig } from 'drizzle-kit'
 
+const {LOCAL_DB_PATH} = process.env;
+
 export default defineConfig({
   schema: './server/database/schema.ts',
   out: './server/database/migrations',
-  driver: 'd1',
+  driver: 'better-sqlite',
   dbCredentials: {
-    wranglerConfigPath: 'wrangler.toml',
-    dbName: 'default',
-  },
+    url: LOCAL_DB_PATH,
 })

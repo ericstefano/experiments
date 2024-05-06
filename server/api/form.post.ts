@@ -80,8 +80,9 @@ export default defineEventHandler(async (event) => {
   // ])
   //   .resize({ width: 1024 }).toBuffer()
   // storage.setItemRaw('to0.avif', toBuffer)
-  await useDB().insert(tables.user).values({
-    id: Math.round(Math.random() * 100000),
+
+  const value = await useDB(event).insert(tables.user).values({
+    id: `${Math.round(Math.random() * 100000)}`,
     email: parsed.output.email,
     fullname: parsed.output.fullname,
     password: parsed.output.password,
@@ -89,9 +90,12 @@ export default defineEventHandler(async (event) => {
     uf: parsed.output.uf,
     shift: parsed.output.shift,
     terms: parsed.output.terms,
-  })
-  return {
-    ...parsed.output,
-    image: undefined,
-  }
+  }).returning()
+
+  return value;
+  
+  // return {
+  //   ...parsed.output,
+  //   image: undefined,
+  // }
 })
