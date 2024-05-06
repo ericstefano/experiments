@@ -1,6 +1,0 @@
-[[d1_databases]]
-binding = "DB"
-database_name = "demo"
-database_id = "b11a90b1-4c18-4d5e-af9f-dcbb7e7baa64"
-preview_database_id = "DB"
-migrations_dir = "./server/database/migrations"
