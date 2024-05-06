@@ -1,18 +1,18 @@
 import { Buffer } from 'node:buffer'
 import * as v from 'valibot'
 import parsePhoneNumber from 'libphonenumber-js/mobile'
-import fsLiteDriver from 'unstorage/drivers/fs-lite'; import { createStorage } from 'unstorage'
-import sharp from 'sharp'
+// import fsLiteDriver from 'unstorage/drivers/fs-lite'; import { createStorage } from 'unstorage'
+// import sharp from 'sharp'
 import { emailSchema, fullnameSchema, passwordSchema, shiftSchema, termsSchema, ufSchema } from '~/pages/form/-schema'
 import { ACCEPTED_IMAGE_MIME_TYPES, MAX_IMAGE_FILE_SIZE } from '~/constants'
 
-const storage = createStorage({
-  driver: fsLiteDriver({ base: './.nuxt/tmp' }),
-})
+// const storage = createStorage({
+//   driver: fsLiteDriver({ base: './.nuxt/tmp' }),
+// })
 
-const assets = createStorage({
-  driver: fsLiteDriver({ base: './assets' }),
-})
+// const assets = createStorage({
+//   driver: fsLiteDriver({ base: './assets' }),
+// })
 
 export default defineEventHandler(async (event) => {
   const multipart = await readMultipartFormData(event)
@@ -69,17 +69,17 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const sharpStream = sharp(parsed.output.image.data)
-  const metadata = await sharpStream.metadata()
-  let toAvif = sharpStream.toFormat('avif', { effort: 0, quality: 45 }).withMetadata()
-  if (metadata.orientation)
-    toAvif = toAvif.rotate()
-  const toBuffer = await toAvif.composite([
-    { input: await assets.getItemRaw('/images/watermark.png'), blend: 'atop', gravity: 'centre' },
-    { input: await assets.getItemRaw('/images/watermark.png'), blend: 'exclusion', left: 800, top: 1160 },
-  ])
-    .resize({ width: 1024 }).toBuffer()
-  storage.setItemRaw('to0.avif', toBuffer)
+  // const sharpStream = sharp(parsed.output.image.data)
+  // const metadata = await sharpStream.metadata()
+  // let toAvif = sharpStream.toFormat('avif', { effort: 0, quality: 45 }).withMetadata()
+  // if (metadata.orientation)
+  //   toAvif = toAvif.rotate()
+  // const toBuffer = await toAvif.composite([
+  //   { input: await assets.getItemRaw('/images/watermark.png'), blend: 'atop', gravity: 'centre' },
+  //   { input: await assets.getItemRaw('/images/watermark.png'), blend: 'exclusion', left: 800, top: 1160 },
+  // ])
+  //   .resize({ width: 1024 }).toBuffer()
+  // storage.setItemRaw('to0.avif', toBuffer)
   await useDB().insert(tables.user).values({
     id: Math.round(Math.random() * 100000),
     email: parsed.output.email,
