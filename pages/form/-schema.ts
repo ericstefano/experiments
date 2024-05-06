@@ -1,7 +1,5 @@
 import * as v from 'valibot'
-import { ACCEPTED_IMAGE_FILE_EXTENSIONS, ACCEPTED_IMAGE_MIME_TYPES, BRAZILIAN_STATES, MAX_IMAGE_FILE_SIZE } from '~/constants/'
-
-const UFS = BRAZILIAN_STATES.map(({ uf }) => uf)
+import { ACCEPTED_IMAGE_FILE_EXTENSIONS, ACCEPTED_IMAGE_MIME_TYPES, BRAZILIAN_STATES_UFS, MAX_IMAGE_FILE_SIZE } from '~/constants/'
 
 export const fullnameSchema = v
   .string('Por favor, preencha o campo de nome.', [
@@ -42,4 +40,4 @@ export const shiftSchema = v
   .picklist(['morning', 'afternoon', 'evening'], 'Por favor, selecione um turno.')
 
 export const ufSchema = v
-  .picklist(UFS, 'Por favor, selecione um estado.')
+  .picklist(BRAZILIAN_STATES_UFS, 'Por favor, selecione um estado.')

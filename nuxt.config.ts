@@ -5,6 +5,7 @@ export default defineNuxtConfig({
   ssr: false,
 
   modules: [
+    '@nuxthub/core',
     '@vueuse/nuxt',
     'nuxt-icon',
     '@pinia/nuxt',
@@ -13,7 +14,6 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
     'shadcn-nuxt',
-    '@nuxthub/core',
   ],
 
   experimental: {
@@ -22,6 +22,10 @@ export default defineNuxtConfig({
     payloadExtraction: false,
     renderJsonPayloads: true,
     typedPages: true,
+  },
+
+  hub: {
+    database: true,
   },
 
   vite: {
