@@ -24,6 +24,10 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: pnpm
+      - name: Install
+        run: pnpm install
+      - name: Build
+        run: pnpm build
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         with:
