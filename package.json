@@ -14,7 +14,7 @@
     "typecheck": "vue-tsc --noEmit",
     "db:generate": "drizzle-kit generate:sqlite",
     "db:migrate": "wrangler d1 migrations apply default --local",
-    "db:migrate:prod": "wrangler d1 migrations apply default",
+    "db:migrate:prod": "wrangler d1 migrations apply default --remote",
     "db:studio": "LOCAL_DB_PATH=$(find ./.wrangler/state/v3/d1/miniflare-D1DatabaseObject -type f -name '*.sqlite' -print -quit) drizzle-kit studio --config ./drizzle.config.local.ts"
   },
   "dependencies": {
