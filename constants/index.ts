@@ -47,7 +47,7 @@ export const BRAZILIAN_STATES = [
   { name: 'São Paulo', uf: 'SP' },
   { name: 'Sergipe', uf: 'SE' },
   { name: 'Tocantins', uf: 'TO' },
-]
+] as const
 
 export const BRAZILIAN_STATES_UFS = [
   'AC',
@@ -77,6 +77,6 @@ export const BRAZILIAN_STATES_UFS = [
   'SP',
   'SE',
   'TO',
-]
+] as const
 
 export const BRAZILIAN_PHONE_MASK = '(##) #####-####'

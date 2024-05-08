@@ -27,7 +27,7 @@ jobs:
       - name: Install
         run: pnpm install
       - name: Build
-        run: pnpm build --preset cloudflare_pages
+        run: pnpm build:prod
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         with:

@@ -82,7 +82,7 @@ export default defineEventHandler(async (event) => {
   // storage.setItemRaw('to0.avif', toBuffer)
 
   const value = await useDB(event).insert(tables.user).values({
-    id: `${Math.round(Math.random() * 100000)}`,
+    id: nanoid(),
     email: parsed.output.email,
     fullname: parsed.output.fullname,
     password: parsed.output.password,
@@ -92,8 +92,8 @@ export default defineEventHandler(async (event) => {
     terms: parsed.output.terms,
   }).returning()
 
-  return value;
-  
+  return value
+
   // return {
   //   ...parsed.output,
   //   image: undefined,

@@ -4,6 +4,7 @@
   "packageManager": "pnpm@9.1.0+sha256.22e36fba7f4880ecf749a5ca128b8435da085ecd49575e7fb9e64d6bf4fad394",
   "scripts": {
     "build": "nuxi build",
+    "build:prod": "nuxi build --preset cloudflare_pages",
     "dev:pwa": "VITE_PLUGIN_PWA=true nuxi dev",
     "dev": "nuxi dev",
     "generate": "nuxi generate",
@@ -19,7 +20,8 @@
   },
   "dependencies": {
     "@iconify-json/lucide": "^1.1.186",
-    "drizzle-orm": "^0.30.10"
+    "drizzle-orm": "^0.30.10",
+    "nanoid": "^5.0.7"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.13.3",
