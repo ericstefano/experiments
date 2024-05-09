@@ -24,7 +24,7 @@ jobs:
       - name: Build
         run: pnpm build:prod
       - name: Deploy
-        run: CLOUDFLARE_API_TOKEN="${{ secrets.CLOUDFLARE_API_TOKEN }}" CLOUDFLARE_ACCOUNT_ID="${{ secrets.CLOUDFLARE_ACCOUNT_ID }}" pnpm exec wrangler pages deploy dist --project-name=experiments
+        run: CLOUDFLARE_API_TOKEN="${{ secrets.CLOUDFLARE_API_TOKEN }}" CLOUDFLARE_ACCOUNT_ID="${{ secrets.CLOUDFLARE_ACCOUNT_ID }}" pnpm wrangler pages deploy dist --project-name=experiments --commit-dirty=true
         # uses: cloudflare/wrangler-action@v3
         # with:
         #   apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
