@@ -15,6 +15,7 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
     'shadcn-nuxt',
+    '@nuxt/test-utils/module',
   ],
 
   experimental: {
