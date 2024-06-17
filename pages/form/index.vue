@@ -96,7 +96,7 @@ const onSubmit = handleSubmit(async (values) => {
   const form = objectToFormData(values)
   console.log('values', values)
   console.log('form', form)
-  await $fetch('/api/form', {
+  await $fetch('/api/signup', {
     method: 'post',
     body: form,
   })

@@ -1,12 +1,12 @@
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 
-export const user = sqliteTable('user', {
+export const userTable = sqliteTable('user', {
   id: text('id').primaryKey(),
-  fullname: text('fullname').notNull(),
-  phone: text('phone').notNull(),
-  email: text('email').notNull(),
-  terms: integer('terms', { mode: 'boolean' }).notNull(),
-  shift: text('shift', { enum: ['morning', 'afternoon', 'evening'] }).notNull(),
+  fullname: text('fullname'),
+  phone: text('phone'),
+  email: text('email'),
+  terms: integer('terms', { mode: 'boolean' }),
+  shift: text('shift', { enum: ['morning', 'afternoon', 'evening'] }),
   uf: text('uf', {
     enum: [
       'AC',
@@ -37,22 +37,22 @@ export const user = sqliteTable('user', {
       'SE',
       'TO',
     ],
-  }).notNull(),
-  password: text('hashed_password').notNull(),
+  }),
+  hashedPassword: text('hashed_password'),
+  emailVerified: integer('email_verified', { mode: 'boolean' }),
 })
 
-// export const session = sqliteTable('session', {
-//   id: text('id').primaryKey(),
-//   expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull(),
-//   userId: text('user_id')
-//     .notNull()
-//     .references(() => user.id, { onDelete: 'cascade' }),
-// })
+export const sessionTable = sqliteTable('session', {
+  id: text('id').primaryKey(),
+  userId: text('user_id')
+    .references(() => userTable.id, { onDelete: 'cascade' }),
+  expiresAt: integer('expires_at', { mode: 'timestamp' }),
+})
 
-// export const oauth_account = sqliteTable('oauth_account', {
-//   providerId: text('provider_id').notNull(),
-//   providerUserId: text('provider_user_id').notNull(),
-//   userId: text('user_id')
-//     .notNull()
-//     .references(() => user.id, { onDelete: 'cascade' }),
-// })
+export const emailVerificationTable = sqliteTable('email_verification', {
+  id: text('id').primaryKey(),
+  userId: text('user_id')
+    .references(() => userTable.id, { onDelete: 'cascade' }),
+  code: text('code'),
+  expiresAt: integer('expires_at', { mode: 'timestamp' }),
+})

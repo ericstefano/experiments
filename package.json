@@ -1,7 +1,6 @@
 {
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@9.1.0",
   "scripts": {
     "build": "nuxi build",
     "build:prod": "nuxi build --preset cloudflare_pages",
@@ -23,8 +22,11 @@
   },
   "dependencies": {
     "@iconify-json/lucide": "^1.1.186",
+    "@lucia-auth/adapter-drizzle": "^1.0.7",
+    "@lucia-auth/adapter-sqlite": "^3.0.1",
+    "dayjs": "^1.11.11",
     "drizzle-orm": "^0.30.10",
-    "nanoid": "^5.0.7"
+    "lucia": "^3.2.0"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.13.3",

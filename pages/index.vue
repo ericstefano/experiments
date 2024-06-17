@@ -1,4 +1,3 @@
 <template>
-  <div class="h-screen w-screen text-black bg-white">
-  </div>
+  <div class="h-dvh w-screen text-black bg-white" />
 </template>
