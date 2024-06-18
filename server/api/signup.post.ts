@@ -87,16 +87,16 @@ export default defineEventHandler({
       emailVerified: false,
     })
 
-    // const session = await lucia.createSession(userId, {
-    //   ['expires_at']: dayjs(createDate(new TimeSpan(2, 'w'))).format('YYYY-MM-DD HH:mm:ss'),
-    // })
-    // const sessionCookie = lucia.createSessionCookie(session.id)
+    const session = await lucia.createSession(userId, {
+      ['expires_at']: dayjs(createDate(new TimeSpan(2, 'w'))).format('YYYY-MM-DD HH:mm:ss'),
+    })
+    const sessionCookie = lucia.createSessionCookie(session.id)
 
-    // appendHeader(
-    //   event,
-    //   'Set-Cookie',
-    //   sessionCookie.serialize(),
-    // )
-    // return useSendEmailVerificationCode(event, { userId, email: parsed.output.email })
+    appendHeader(
+      event,
+      'Set-Cookie',
+      sessionCookie.serialize(),
+    )
+    return useSendEmailVerificationCode(event, { userId, email: parsed.output.email })
   },
 })
