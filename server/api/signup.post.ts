@@ -2,7 +2,7 @@ import { Buffer } from 'node:buffer'
 import * as v from 'valibot'
 import parsePhoneNumber from 'libphonenumber-js/mobile'
 import { TimeSpan, createDate } from 'oslo'
-import { alphabet, generateRandomString } from 'oslo/crypto'
+import { getUnixTime } from 'date-fns'
 import { createError } from 'h3'
 import { generateIdFromEntropySize } from 'lucia'
 import { emailSchema, fullnameSchema, passwordSchema, shiftSchema, termsSchema, ufSchema } from '~/pages/form/-schema'
@@ -86,7 +86,7 @@ export default defineEventHandler({
     })
 
     const session = await lucia.createSession(userId, {
-      ['expires_at']:  Math.floor(createDate(new TimeSpan(2, 'w')).getTime() / 1000).toString(),
+      ['expires_at']: getUnixTime(createDate(new TimeSpan(2, 'w'))),
     })
     const sessionCookie = lucia.createSessionCookie(session.id)
 
