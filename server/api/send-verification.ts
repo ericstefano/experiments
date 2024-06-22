@@ -13,6 +13,6 @@ export default defineEventHandler({
   onRequest: [usePreventCsrf, useAuth],
   async handler(event) {
     const { user } = event.context
-    useSendEmailVerificationCode(event, { userId: user.id, email: user.email })
+    return useSendEmailVerificationCode(event, { userId: user.id, email: user.email })
   },
 })
