@@ -12,7 +12,6 @@ export async function useAuth(event: H3Event) {
     throw createError({ status: 401 })
 
   const sessionCookie = session && session.fresh ? lucia.createSessionCookie(session.id) : lucia.createBlankSessionCookie()
-
   appendHeader(
     event,
     'Set-Cookie',

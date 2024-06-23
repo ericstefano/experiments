@@ -1,13 +1,18 @@
 import { drizzle } from 'drizzle-orm/d1'
 
+function createDrizzleDb(event: H3Event) {
+  return drizzle(event.context.cloudflare.env.DB, { schema: tables })
+}
+
 export function useDrizzleDb(event: H3Event) {
-  const drizzleDb = drizzle(event.context.cloudflare.env.DB, { schema: tables })
+  if (!!event.context.db) return event.context.db;
+  const drizzleDb = createDrizzleDb(event)
   event.context.db = drizzleDb
   return drizzleDb
 }
 
 declare module 'h3' {
   interface H3EventContext {
-    db: ReturnType<typeof useDrizzleDb>
+    db: ReturnType<typeof createDrizzleDb>
   }
 }

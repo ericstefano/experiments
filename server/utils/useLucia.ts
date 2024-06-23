@@ -1,13 +1,13 @@
 import { Lucia } from 'lucia'
 import { D1Adapter } from '@lucia-auth/adapter-sqlite'
 
-export function useLucia(event: H3Event) {
+function createLucia(event: H3Event) {
   const adapter = new D1Adapter(event.context.cloudflare.env.DB, {
     user: 'user',
     session: 'session',
   })
 
-  const lucia = new Lucia(adapter, {
+  return new Lucia(adapter, {
     sessionCookie: {
       attributes: {
         secure: !import.meta.dev,
@@ -20,6 +20,11 @@ export function useLucia(event: H3Event) {
       }
     },
   })
+}
+
+export function useLucia(event: H3Event) {
+  if (!!event.context.lucia) return event.context.lucia;
+  const lucia = createLucia(event);
   event.context.lucia = lucia
   return lucia
 }
@@ -38,6 +43,6 @@ declare module 'lucia' {
 
 declare module 'h3' {
   interface H3EventContext {
-    lucia: ReturnType<typeof useLucia>
+    lucia: ReturnType<typeof createLucia>
   }
 }

@@ -52,7 +52,7 @@ export const sessionTable = sqliteTable('session', {
 export const emailVerificationTable = sqliteTable('email_verification', {
   id: text('id').primaryKey(),
   userId: text('user_id')
-    .references(() => userTable.id, { onDelete: 'cascade' }),
-  code: text('code'),
-  expiresAt: integer('expires_at', { mode: 'timestamp' }),
+    .references(() => userTable.id, { onDelete: 'cascade' }).notNull(),
+  code: text('code').notNull(),
+  expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull(),
 })

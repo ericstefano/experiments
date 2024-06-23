@@ -7,8 +7,8 @@ export function usePreventCsrf(event: H3Event) {
   // It suggest's using composables (utils) + object syntax with handlers like this
   // Cross Site Request Forgery Prevention
   if (!isMethod(event, 'GET')) {
-    const originHeader = getHeader(event, 'Origin') ?? null
-    const hostHeader = getHeader(event, 'Host') ?? null
+    const originHeader = getHeader(event, 'Origin') || null
+    const hostHeader = getHeader(event, 'Host') || null
     if (!originHeader || !hostHeader || !verifyRequestOrigin(originHeader, [hostHeader]))
       throw createError({ status: 403 })
   }
