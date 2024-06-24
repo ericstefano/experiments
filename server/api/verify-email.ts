@@ -3,6 +3,7 @@ import { isWithinExpirationDate } from "oslo";
 export default defineEventHandler({
   onRequest: [usePreventCsrf, useAuth, useDrizzleDb, useLucia],
   async handler(event) {
+    try {
     const {code} = await readBody(event);
     if (!code) throw createError({ status: 400 })
     const {db, lucia, user} = event.context;
@@ -17,5 +18,9 @@ export default defineEventHandler({
     await db.update(tables.userTable).set({
       emailVerified: true
     }).where(eq(tables.userTable.id, user.id))
+  
+    } catch (error) {
+      return {error};
+    }
   }
  })
