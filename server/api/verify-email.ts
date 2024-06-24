@@ -12,11 +12,10 @@ export default defineEventHandler({
     if (!verification) throw createError({ status: 400 })
     if (verification.code !== code) throw createError({ status: 400 });
     if (!isWithinExpirationDate(verification.expiresAt)) throw createError({ status: 400 })
-    return true;
-    // await db.delete(tables.emailVerificationTable).where(eq(tables.userTable.id, user.id))
-    // await lucia.invalidateSession(user.id)
-    // await db.update(tables.userTable).set({
-    //   emailVerified: true
-    // }).where(eq(tables.userTable.id, user.id))
+    await db.delete(tables.emailVerificationTable).where(eq(tables.emailVerificationTable.id, user.id))
+    await lucia.invalidateSession(user.id)
+    await db.update(tables.userTable).set({
+      emailVerified: true
+    }).where(eq(tables.userTable.id, user.id))
   }
  })
