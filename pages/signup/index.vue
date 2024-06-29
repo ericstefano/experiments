@@ -22,12 +22,22 @@ import { ACCEPTED_IMAGE_MIME_TYPES, BRAZILIAN_PHONE_MASK, BRAZILIAN_STATES } fro
 //   type: 'module',
 // })
 
-import Test from '~/assets/workers/test.worker.ts?worker&url'
+// import Test from '~/assets/workers/test.worker.ts?worker&url'
 
-const { worker } = useWebWorker(Test, {
-  type: 'module',
-})
-worker.value?.postMessage('oi')
+// const { worker } = useWebWorker(Test, {
+//   type: 'module',
+// })
+// worker.value?.postMessage('oi')
+
+definePageMeta({
+  middleware: [
+    'only-visitors',
+  ],
+  pageTransition: {
+    name: 'page',
+    mode: 'out-in',
+  }
+});
 
 const phoneCache = shallowRef(new Map<string, boolean>())
 
@@ -35,12 +45,13 @@ const debouncedValidatePhoneNumber = useDebounceFn(validatePhoneNumber, 1000)
 
 async function handleValidatePhone(number: string) {
   const sanitized = sanitizePhoneNumber(number)
+  if (sanitized.length < 11) return false; 
   if (phoneCache.value.has(sanitized))
     return !!phoneCache.value.get(sanitized)
   const response = await debouncedValidatePhoneNumber(sanitized)
-  const valid = response && !!response.valid
-  phoneCache.value.set(sanitized, valid)
-  return valid
+  const isValid = response && !!response.valid
+  phoneCache.value.set(sanitized, isValid)
+  return isValid
 }
 
 const phoneSchema = v
@@ -92,21 +103,29 @@ function objectToFormData(obj: Record<string, string | number | boolean | Blob>)
   return formData
 }
 
+const {setAuth} = await useAuth();
+
 const onSubmit = handleSubmit(async (values) => {
   const form = objectToFormData(values)
   await $fetch('/api/signup', {
     method: 'post',
     body: form,
+    async onResponse(ctx) {
+      if (!ctx.response.ok) return;
+      const data = await ctx.response._data;
+      setAuth({isAuthorized: !!data, user: data})
+      navigateTo('/verify');
+    }
   })
 })
 </script>
 
 <template>
-  <div class="min-h-screen w-screen flex justify-center items-center p-4">
+  <div class="min-h-screen flex justify-center items-center p-4">
     <Card class="w-[28rem]">
       <CardHeader>
         <CardTitle>Comece agora</CardTitle>
-        <CardDescription>Crie sua conta gratuita em apenas alguns passos simples</CardDescription>
+        <CardDescription>Já possui cadastro? <NuxtLink class="text-blue-500 underline" to="/signin">Acesse sua conta</NuxtLink></CardDescription>
       </CardHeader>
       <CardContent>
         <form class="space-y-4" @submit="onSubmit">

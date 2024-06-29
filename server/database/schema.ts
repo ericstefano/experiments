@@ -4,7 +4,7 @@ export const userTable = sqliteTable('user', {
   id: text('id').primaryKey(),
   fullname: text('fullname'),
   phone: text('phone'),
-  email: text('email'),
+  email: text('email').unique(),
   terms: integer('terms', { mode: 'boolean' }),
   shift: text('shift', { enum: ['morning', 'afternoon', 'evening'] }),
   uf: text('uf', {
@@ -38,7 +38,7 @@ export const userTable = sqliteTable('user', {
       'TO',
     ],
   }),
-  hashedPassword: text('hashed_password'),
+  hashedPassword: text('hashed_password').notNull(),
   emailVerified: integer('email_verified', { mode: 'boolean' }),
 })
 

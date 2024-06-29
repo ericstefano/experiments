@@ -4,7 +4,7 @@ function createDrizzleDb(event: H3Event) {
   return drizzle(event.context.cloudflare.env.DB, { schema: tables })
 }
 
-export function useDrizzleDb(event: H3Event) {
+export function useDatabase(event: H3Event) {
   if (!!event.context.db) return event.context.db;
   const drizzleDb = createDrizzleDb(event)
   event.context.db = drizzleDb

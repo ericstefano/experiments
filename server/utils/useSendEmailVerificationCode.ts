@@ -4,7 +4,7 @@ import { alphabet, generateRandomString } from 'oslo/crypto'
 import { eq } from 'drizzle-orm'
 
 export async function useSendEmailVerificationCode(event: H3Event, { userId, email }: { userId: string, email: string }) {
-  const db = useDrizzleDb(event)
+  const db = useDatabase(event)
   try {
     await db.delete(tables.emailVerificationTable).where(eq(tables.userTable.id, userId))
   } catch {}
@@ -15,6 +15,6 @@ export async function useSendEmailVerificationCode(event: H3Event, { userId, ema
     code: verificationCode,
     expiresAt: createDate(new TimeSpan(15, 'm')),
   })
-  return {email, verificationCode}
-  // sendEmail({ email, code: verificationCode })
+  // await sendEmail({ email, code: verificationCode })
+  return { email, verificationCode }
 }

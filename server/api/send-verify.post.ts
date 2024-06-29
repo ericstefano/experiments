@@ -7,8 +7,6 @@
 // 7) Saves the verificationCode in the table
 // 8) Send email with code
 
-// import { useSendEmailVerificationCode } from "../utils/useSendEmailVerificationCode"
-
 export default defineEventHandler({
   onRequest: [usePreventCsrf, useAuth],
   async handler(event) {

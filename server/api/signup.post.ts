@@ -5,11 +5,11 @@ import { TimeSpan, createDate } from 'oslo'
 import { getUnixTime } from 'date-fns'
 import { createError } from 'h3'
 import { generateIdFromEntropySize } from 'lucia'
-import { emailSchema, fullnameSchema, passwordSchema, shiftSchema, termsSchema, ufSchema } from '~/pages/form/-schema'
+import { emailSchema, fullnameSchema, passwordSchema, shiftSchema, termsSchema, ufSchema } from '~/pages/signup/-schema'
 import { ACCEPTED_IMAGE_MIME_TYPES, MAX_IMAGE_FILE_SIZE } from '~/constants'
 
 export default defineEventHandler({
-  onRequest: [usePreventCsrf, useLucia, useDrizzleDb],
+  onRequest: [usePreventCsrf, useLucia, useDatabase],
   async handler(event) {
     const multipart = await readMultipartFormData(event)
     if (!multipart) {
@@ -68,33 +68,38 @@ export default defineEventHandler({
     const { db, lucia } = event.context
 
     const scrypt = useScrypt()
-
+    const hashedPassword = await scrypt.hash(parsed.output.password)
     const userId = generateIdFromEntropySize(10)
 
-    const hashedPassword = await scrypt.hash(parsed.output.password)
+    try {
+      await db.insert(tables.userTable).values({
+        id: userId,
+        email: parsed.output.email,
+        fullname: parsed.output.fullname,
+        hashedPassword,
+        phone: parsed.output.phone,
+        uf: parsed.output.uf,
+        shift: parsed.output.shift,
+        terms: parsed.output.terms,
+        emailVerified: false,
+      })
+    }
+    catch(error) { throw createError({ statusCode: 400 }) }
 
-    await db.insert(tables.userTable).values({
-      id: userId,
-      email: parsed.output.email,
-      fullname: parsed.output.fullname,
-      hashedPassword,
-      phone: parsed.output.phone,
-      uf: parsed.output.uf,
-      shift: parsed.output.shift,
-      terms: parsed.output.terms,
-      emailVerified: false,
-    })
-
-    const session = await lucia.createSession(userId, {
-      ['expires_at']: getUnixTime(createDate(new TimeSpan(2, 'w'))),
-    })
-    const sessionCookie = lucia.createSessionCookie(session.id)
+    const { sessionCookie } = await useCreateSession(event, { userId, expires_at: createDate(new TimeSpan(15, 'd')) })
 
     appendHeader(
       event,
       'Set-Cookie',
       sessionCookie.serialize(),
     )
-    return useSendEmailVerificationCode(event, { userId, email: parsed.output.email })
+    const verificationData = await useSendEmailVerificationCode(event, { userId, email: parsed.output.email })
+    return {
+      code: verificationData.verificationCode, //temp, remove after sending email
+      id: userId,
+      email: parsed.output.email,
+      fullname: parsed.output.fullname,
+      emailVerified: false,
+    }
   },
 })
