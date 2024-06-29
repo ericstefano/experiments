@@ -8,21 +8,29 @@ export async function useAuth(event: H3Event) {
     throw createError({ status: 401 })
 
   const { session, user } = await lucia.validateSession(sessionId)
-  if (!user)
+  if (!user || !session) // maybe this verification shouldn't be done (?), check Lucia docs...
     throw createError({ status: 401 })
 
-  const sessionCookie = session && session.fresh ? lucia.createSessionCookie(session.id) : lucia.createBlankSessionCookie()
-  appendHeader(
-    event,
-    'Set-Cookie',
-    sessionCookie.serialize(),
-  )
+  if (session && session.fresh) {
+    appendHeader(
+      event,
+      'Set-Cookie',
+      lucia.createSessionCookie(session.id).serialize(),
+    )
+  }
 
-  event.context.sessionCookie = sessionCookie
+  if (!session) {
+    appendHeader(
+      event,
+      'Set-Cookie',
+      lucia.createBlankSessionCookie().serialize(),
+    )
+  }
+
   event.context.session = session
   event.context.user = user
 
-  return { user, session, sessionCookie }
+  return { user, session }
 }
 
 declare module 'h3' {

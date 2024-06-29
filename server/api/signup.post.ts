@@ -86,13 +86,14 @@ export default defineEventHandler({
     }
     catch(error) { throw createError({ statusCode: 400 }) }
 
-    const { sessionCookie } = await useCreateSession(event, { userId, expires_at: createDate(new TimeSpan(15, 'd')) })
+    const { sessionCookie } = await useCreateSession(event, { userId })
 
     appendHeader(
       event,
       'Set-Cookie',
       sessionCookie.serialize(),
     )
+    
     const verificationData = await useSendEmailVerificationCode(event, { userId, email: parsed.output.email })
     return {
       code: verificationData.verificationCode, //temp, remove after sending email

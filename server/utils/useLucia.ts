@@ -1,4 +1,4 @@
-import { Lucia } from 'lucia'
+import { Lucia, TimeSpan } from 'lucia'
 import { D1Adapter } from '@lucia-auth/adapter-sqlite'
 
 function createLucia(event: H3Event) {
@@ -8,6 +8,7 @@ function createLucia(event: H3Event) {
   })
 
   return new Lucia(adapter, {
+    sessionExpiresIn: new TimeSpan(2, 'w'),
     sessionCookie: {
       attributes: {
         secure: !import.meta.dev,
@@ -17,6 +18,7 @@ function createLucia(event: H3Event) {
       return {
         emailVerified: attributes.emailVerified,
         email: attributes.email,
+        fullname: attributes.fullname
       }
     },
   })
@@ -32,6 +34,7 @@ export function useLucia(event: H3Event) {
 interface DatabaseUserAttributes {
   email: string
   emailVerified: boolean
+  fullname: string
 }
 
 declare module 'lucia' {

@@ -3,7 +3,7 @@ definePageMeta({
   middleware: [
     'retrieve-auth',
     'only-users',
-  ],
+  ], // order of middleware affects how it runs
 });
 const { auth } = await useAuth();
 </script>

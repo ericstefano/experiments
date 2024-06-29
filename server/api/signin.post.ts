@@ -1,6 +1,5 @@
 import { eq } from "drizzle-orm";
 import * as v from 'valibot';
-import { TimeSpan, createDate } from 'oslo'
 export default defineEventHandler({
   onRequest: [usePreventCsrf, useDatabase],
   async handler(event) {
@@ -19,7 +18,7 @@ export default defineEventHandler({
     const scrypt = useScrypt();
     const isValid = await scrypt.verify(user.hashedPassword, parsed.output.password);
     if (!isValid) throw createError({ statusCode: 400 })
-    const { sessionCookie } = await useCreateSession(event, { userId: user.id, expires_at: createDate(new TimeSpan(15, 'd')) })
+    const { sessionCookie } = await useCreateSession(event, { userId: user.id })
     appendHeader(
       event,
       'Set-Cookie',
