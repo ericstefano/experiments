@@ -114,7 +114,7 @@ const onSubmit = handleSubmit(async (values) => {
     async onResponse(ctx) {
       if (!ctx.response.ok) return;
       const data = await ctx.response._data;
-      setAuth({isAuthorized: !!data, user: data})
+      setAuth({isAuthorized: true, user: data})
       navigateTo('/verify');
     }
   })

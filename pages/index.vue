@@ -5,7 +5,19 @@ definePageMeta({
     'only-users',
   ], // order of middleware affects how it runs
 });
-const { auth } = await useAuth();
+const { auth, setAuth } = await useAuth();
+async function signout() {
+  try {
+    await $fetch('/api/signout', {
+      method: 'POST',
+      async onResponse(ctx) {
+        if (!ctx.response.ok) return;
+        setAuth({isAuthorized: false, user: null})
+        await navigateTo('/signin')
+      }
+    });
+  } catch {}
+}
 </script>
 
 <template>
@@ -20,9 +32,10 @@ const { auth } = await useAuth();
           v-if="!auth?.user?.emailVerified">Seu e-mail {{ auth?.user?.emailVerified ? 'está' : 'não está' }} verfificado.</p>
         <NuxtLink v-if="!auth?.user?.emailVerified" custom to="/verify">
           <template #default="{ href, navigate }">
-            <Button @click="navigate">Verficar e-mail</Button>
+            <Button class="mb-1" @click="navigate">Verficar e-mail</Button>
           </template>
         </NuxtLink>
+        <Button @click="signout">Signout</Button>
       </div>
     </div>
   </div>
