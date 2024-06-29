@@ -10,6 +10,7 @@ import { emailSchema, passwordSchema } from './-schema'
 
 definePageMeta({
   middleware: [
+    'retrieve-auth',
     'only-visitors',
   ],
   pageTransition: {

@@ -31,6 +31,7 @@ import { ACCEPTED_IMAGE_MIME_TYPES, BRAZILIAN_PHONE_MASK, BRAZILIAN_STATES } fro
 
 definePageMeta({
   middleware: [
+    'retrieve-auth',
     'only-visitors',
   ],
   pageTransition: {
