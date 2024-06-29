@@ -31,7 +31,7 @@ configure({
   bails: true,
 })
 
-const { handleSubmit } = useForm({
+const { handleSubmit, setErrors } = useForm({
   validationSchema: formSchema,
 })
 
@@ -42,9 +42,12 @@ const onSubmit = handleSubmit(async (values) => {
     method: 'post',
     body: values,
     async onResponse(ctx) {
-      if (!ctx.response.ok) return;
+      if (!ctx.response.ok) return setErrors({
+        password: 'E-mail ou senha incorretos.',
+        email: 'E-mail ou senha incorretos.',
+      });
       const data = await ctx.response._data;
-      setAuth({ isAuthorized: !!data, user: data })
+      setAuth({ isAuthorized: true, user: data })
       navigateTo('/');
     }
   })
