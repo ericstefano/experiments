@@ -38,20 +38,21 @@ const { handleSubmit, setErrors } = useForm({
 const { setAuth } = await useAuth();
 
 const onSubmit = handleSubmit(async (values) => {
-  await $fetch('/api/signin', {
-    method: 'post',
-    body: values,
-    async onResponse(ctx) {
-      if (!ctx.response.ok) return setErrors({
-        password: 'E-mail ou senha incorretos.',
-        email: 'E-mail ou senha incorretos.',
-      });
-      const data = await ctx.response._data;
-      setAuth({ isAuthorized: true, user: data })
-      navigateTo('/');
-    }
-  })
+  try {
+    const data = await $fetch('/api/signin', {
+      method: 'post',
+      body: values,
+    })
+    setAuth({ isAuthorized: true, user: data })
+    navigateTo('/');
+  } catch (error) {
+    setErrors({
+      password: 'E-mail ou senha incorretos.',
+      email: 'E-mail ou senha incorretos.',
+    });
+  }
 })
+
 </script>
 
 <template>

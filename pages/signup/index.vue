@@ -108,16 +108,14 @@ const {setAuth} = await useAuth();
 
 const onSubmit = handleSubmit(async (values) => {
   const form = objectToFormData(values)
-  await $fetch('/api/signup', {
-    method: 'post',
-    body: form,
-    async onResponse(ctx) {
-      if (!ctx.response.ok) return;
-      const data = await ctx.response._data;
-      setAuth({isAuthorized: true, user: data})
-      navigateTo('/verify');
-    }
-  })
+  try {
+    const data = await $fetch('/api/signup', {
+      method: 'post',
+      body: form,
+    })
+    setAuth({ isAuthorized: true, user: data })
+    navigateTo('/verify');
+  } catch {}
 })
 </script>
 

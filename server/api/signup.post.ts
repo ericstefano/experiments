@@ -1,15 +1,13 @@
 import { Buffer } from 'node:buffer'
 import * as v from 'valibot'
 import parsePhoneNumber from 'libphonenumber-js/mobile'
-import { TimeSpan, createDate } from 'oslo'
-import { getUnixTime } from 'date-fns'
 import { createError } from 'h3'
 import { generateIdFromEntropySize } from 'lucia'
 import { emailSchema, fullnameSchema, passwordSchema, shiftSchema, termsSchema, ufSchema } from '~/pages/signup/-schema'
 import { ACCEPTED_IMAGE_MIME_TYPES, MAX_IMAGE_FILE_SIZE } from '~/constants'
 
 export default defineEventHandler({
-  onRequest: [usePreventCsrf, useLucia, useDatabase],
+  onRequest: [usePreventCsrf, useDatabase],
   async handler(event) {
     const multipart = await readMultipartFormData(event)
     if (!multipart) {
@@ -65,7 +63,7 @@ export default defineEventHandler({
       })
     }
 
-    const { db, lucia } = event.context
+    const { db } = event.context
 
     const scrypt = useScrypt()
     const hashedPassword = await scrypt.hash(parsed.output.password)

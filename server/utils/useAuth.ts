@@ -3,7 +3,7 @@ import { createError } from 'h3'
 
 export async function useAuth(event: H3Event) {
   const lucia = useLucia(event)
-  const sessionId = getCookie(event, lucia.sessionCookieName) ?? null
+  const sessionId = getCookie(event, lucia.sessionCookieName)
   if (!sessionId)
     throw createError({ status: 401 })
 

@@ -10,13 +10,10 @@ async function signout() {
   try {
     await $fetch('/api/signout', {
       method: 'POST',
-      async onResponse(ctx) {
-        if (!ctx.response.ok) return;
-        setAuth({isAuthorized: false, user: null})
-        await navigateTo('/signin')
-      }
     });
-  } catch {}
+    setAuth({ isAuthorized: false, user: null })
+    await navigateTo('/signin')
+  } catch { }
 }
 </script>
 
@@ -29,7 +26,8 @@ async function signout() {
       </p>
       <div class="flex flex-col items-center justify-center gap-3">
         <p :class="{ 'text-green-500': auth?.user?.emailVerified, 'text-red-500': !auth?.user?.emailVerified }"
-          v-if="!auth?.user?.emailVerified">Seu e-mail {{ auth?.user?.emailVerified ? 'está' : 'não está' }} verfificado.</p>
+          v-if="!auth?.user?.emailVerified">Seu e-mail {{ auth?.user?.emailVerified ? 'está' : 'não está' }}
+          verfificado.</p>
         <NuxtLink v-if="!auth?.user?.emailVerified" custom to="/verify">
           <template #default="{ href, navigate }">
             <Button class="mb-1" @click="navigate">Verficar e-mail</Button>
