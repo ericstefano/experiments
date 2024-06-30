@@ -38,21 +38,21 @@ export const userTable = sqliteTable('user', {
       'TO',
     ],
   }),
-  hashedPassword: text('hashedPassword').notNull(),
-  emailVerified: integer('emailVerified', { mode: 'boolean' }),
+  hashedPassword: text('hashed_password').notNull(),
+  emailVerified: integer('email_verified', { mode: 'boolean' }),
 })
 
 export const sessionTable = sqliteTable('session', {
   id: text('id').primaryKey(),
-  userId: text('userId')
+  userId: text('user_id')
     .references(() => userTable.id, { onDelete: 'cascade' }),
-  expiresAt: integer('expiresAt', { mode: 'timestamp' }),
+  expiresAt: integer('expires_at', { mode: 'timestamp' }),
 })
 
-export const emailVerificationTable = sqliteTable('emailVerification', {
+export const emailVerificationTable = sqliteTable('email_verification', {
   id: text('id').primaryKey(),
-  userId: text('userId')
+  userId: text('user_id')
     .references(() => userTable.id, { onDelete: 'cascade' }).notNull(),
   code: text('code').notNull(),
-  expiresAt: integer('expiresAt', { mode: 'timestamp' }).notNull(),
+  expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull(),
 })

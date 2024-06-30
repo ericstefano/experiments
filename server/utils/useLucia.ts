@@ -16,7 +16,7 @@ function createLucia(event: H3Event) {
     },
     getUserAttributes(attributes) {
       return {
-        emailVerified: attributes.emailVerified,
+        emailVerified: attributes.email_verified,
         email: attributes.email,
         fullname: attributes.fullname
       }
@@ -33,7 +33,7 @@ export function useLucia(event: H3Event) {
 
 interface DatabaseUserAttributes {
   email: string
-  emailVerified: boolean
+  email_verified: boolean
   fullname: string
 }
 
