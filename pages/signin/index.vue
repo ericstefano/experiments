@@ -44,7 +44,7 @@ const onSubmit = handleSubmit(async (values) => {
       body: values,
     })
     setAuth({ isAuthorized: true, user: data })
-    navigateTo('/');
+    await navigateTo('/');
   } catch (error) {
     setErrors({
       password: 'E-mail ou senha incorretos.',
