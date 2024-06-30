@@ -22,7 +22,7 @@ export default defineEventHandler({
     return {
       fullname: user.fullname,
       email: user.email,
-      emailVerified: user.emailVerified,
+      emailVerified: true,
       id: user.id
     }
   }

@@ -16,7 +16,7 @@ function createLucia(event: H3Event) {
     },
     getUserAttributes(attributes) {
       return {
-        emailVerified: attributes.email_verified,
+        emailVerified: Boolean(attributes.email_verified),
         email: attributes.email,
         fullname: attributes.fullname
       }
