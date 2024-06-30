@@ -26,7 +26,7 @@ async function signout() {
       </p>
       <div class="flex flex-col items-center justify-center gap-3">
         <p :class="{ 'text-green-500': auth?.user?.emailVerified, 'text-red-500': !auth?.user?.emailVerified }"
-          v-if="!auth?.user?.emailVerified">Seu e-mail {{ auth?.user?.emailVerified ? 'está' : 'não está' }}
+          >Seu e-mail {{ auth?.user?.emailVerified ? 'está' : 'não está' }}
           verfificado.</p>
         <NuxtLink v-if="!auth?.user?.emailVerified" custom to="/verify">
           <template #default="{ href, navigate }">

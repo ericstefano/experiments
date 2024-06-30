@@ -19,5 +19,11 @@ export default defineEventHandler({
     await db.update(tables.userTable).set({
       emailVerified: true
     }).where(eq(tables.userTable.id, user.id))
+    return {
+      fullname: user.fullname,
+      email: user.email,
+      emailVerified: user.emailVerified,
+      id: user.id
+    }
   }
 })

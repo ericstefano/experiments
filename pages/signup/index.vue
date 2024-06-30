@@ -114,7 +114,7 @@ const onSubmit = handleSubmit(async (values) => {
       body: form,
     })
     setAuth({ isAuthorized: true, user: data })
-    navigateTo('/verify');
+    navigateTo('/');
   } catch {}
 })
 </script>
